@@ -1,0 +1,22 @@
+/* global require, module */
+
+const express = require("express");
+const router = express.Router();
+
+const { registerUser, loginUser } = require("../controllers/authController");
+
+const authMiddleware = require("../middleware/authMiddleware");
+
+// Public routes
+router.post("/register", registerUser);
+router.post("/login", loginUser);
+
+// Protected route
+router.get("/me", authMiddleware, (req, res) => {
+  res.status(200).json({
+    message: "Authenticated successfully",
+    user: req.user,
+  });
+});
+
+module.exports = router;
